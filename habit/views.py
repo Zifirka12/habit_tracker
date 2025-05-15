@@ -21,10 +21,10 @@ class HabitViewSet(viewsets.ModelViewSet):
         habit_reminder(habit)
 
     @action(detail=False, methods=["GET"])
-    def public_habits(self, request):
-        public_habits = self.queryset.filter(is_public=True)
-        serializer = self.get_serializer(public_habits, many=True)
-        return Response(serializer.data)
+def public_habits(self, request):
+    public_habits = self.queryset.filter(is_habit_public=True)
+    serializer = self.get_serializer(public_habits, many=True)
+    return Response(serializer.data)
 
     def get_permissions(self):
         if self.action not in ["create", "public_habits"]:

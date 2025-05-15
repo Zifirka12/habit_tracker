@@ -6,6 +6,21 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: habit_user
+          POSTGRES_PASSWORD: habit_password
+          POSTGRES_DB: habit_tracker_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
     - name: Check out code
       uses: actions/checkout@v3
@@ -31,6 +46,11 @@ jobs:
     - name: Run tests
       env:
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        POSTGRES_DB: habit_tracker_db
+        POSTGRES_USER: habit_user
+        POSTGRES_PASSWORD: habit_password
+        POSTGRES_HOST: localhost
+        POSTGRES_PORT: 5432
       run: |
         python manage.py test
 
